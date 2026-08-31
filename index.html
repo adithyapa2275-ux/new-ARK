@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>A Special Question for You ❤️</title>
+    <!-- SEO & Meta Tags -->
+    <meta name="description" content="An interactive, cute, and premium proposal card website for someone special.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Canvas for Confetti -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Background Animated Hearts & Glows -->
+    <div class="bg-overlay"></div>
+    <div class="bg-heart-container" id="bg-hearts"></div>
+    <div class="glow-sphere glow-1"></div>
+    <div class="glow-sphere glow-2"></div>
+
+    <!-- Audio Background Music -->
+    <audio id="bg-music" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-campaign-260.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Audio Controls -->
+    <button id="music-toggle" class="music-btn" aria-label="Toggle Music">
+        <i class="fas fa-volume-mute"></i>
+    </button>
+
+    <!-- Main Container -->
+    <main class="app-container">
+
+        <!-- CARD 1: THE PROPOSAL -->
+        <div id="card-proposal" class="glass-card active">
+            <div class="card-badge">For Someone Special ✨</div>
+
+            <!-- Interactive Envelope/Heart Icon -->
+            <div class="heart-animation-wrapper">
+                <div class="floating-envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-body"></div>
+                    <div class="heart-seal">❤️</div>
+                </div>
+            </div>
+
+            <h1 class="proposal-title">To my favorite person... ✨</h1>
+            <p class="proposal-text">
+                Every moment spent with you feels like a beautiful dream. You bring so much light, laughter, and warmth
+                into my life. I have a little question to ask you...
+            </p>
+
+            <h2 class="proposal-question">Will you go out with me?</h2>
+
+            <div class="btn-group">
+                <button id="btn-yes" class="btn btn-primary pulse">Yes, I'd love to! 💖</button>
+                <button id="btn-no" class="btn btn-secondary">No</button>
+            </div>
+        </div>
+
+        <!-- CARD 2: CELEBRATION & LOVE NOTE -->
+        <div id="card-celebration" class="glass-card hidden">
+            <div class="celebration-header">
+                <div class="heart-sparkle">🎉 💖 🍾</div>
+                <h1 class="celebration-title">YAY! You Said Yes!</h1>
+            </div>
+
+            <div class="love-letter-wrapper">
+                <div class="love-letter">
+                    <p><strong>Dear Special Someone,</strong></p>
+                    <p>You just made me the happiest person in the world! I promise to make every day special, to laugh
+                        with you, support you, and create memory after memory that we'll cherish forever.</p>
+                    <p>Since you said yes, let's make it official and plan our perfect date! click the button below to
+                        get started. 👇</p>
+                    <p class="letter-signature">With all my love ❤️</p>
+                </div>
+            </div>
+
+            <button id="btn-go-to-planner" class="btn btn-primary">Plan Our Date 📅</button>
+        </div>
+
+        <!-- CARD 3: DATE PLANNER -->
+        <div id="card-planner" class="glass-card hidden">
+            <h1 class="planner-title">Let's Plan Our Date! 🥂</h1>
+            <p class="planner-subtitle">Customize our first official date exactly how you want it.</p>
+
+            <form id="date-planner-form" class="planner-form" onsubmit="return false;">
+                <!-- Date Selection -->
+                <div class="form-group">
+                    <label for="date-select"><i class="far fa-calendar-alt"></i> Select a Day</label>
+                    <input type="date" id="date-select" required>
+                </div>
+
+                <!-- Time Selection -->
+                <div class="form-group">
+                    <label for="time-select"><i class="far fa-clock"></i> Select a Time</label>
+                    <input type="time" id="time-select" required>
+                </div>
+
+                <!-- Activity Selection -->
+                <div class="form-group">
+                    <label><i class="fas fa-heart"></i> What should we do?</label>
+                    <div class="activity-grid">
+                        <label class="activity-option">
+                            <input type="radio" name="activity" value="Movies" checked>
+                            <div class="activity-card">
+                                <span class="activity-icon">🎬</span>
+                                <span class="activity-label">Movies</span>
+                            </div>
+                        </label>
+                        <label class="activity-option">
+                            <input type="radio" name="activity" value="Foodie Trip">
+                            <div class="activity-card">
+                                <span class="activity-icon">🍽️</span>
+                                <span class="activity-label">Foodie Trip</span>
+                            </div>
+                        </label>
+                        <label class="activity-option">
+                            <input type="radio" name="activity" value="Long Drive">
+                            <div class="activity-card">
+                                <span class="activity-icon">🏍️</span>
+                                <span class="activity-label">Long Drive</span>
+                            </div>
+                        </label>
+                        <label class="activity-option">
+                            <input type="radio" name="activity" value="Games">
+                            <div class="activity-card">
+                                <span class="activity-icon">🎮</span>
+                                <span class="activity-label">Games</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Favorite Dessert/Treat -->
+                <div class="form-group">
+                    <label for="dessert-input"><i class="fas fa-ice-cream"></i> Your Favorite Sweet Treat /
+                        Dessert?</label>
+                    <input type="text" id="dessert-input" placeholder="e.g. Desert, ice cream, etc" required>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="btn-lock-date" class="btn btn-primary btn-submit">Lock It In! 🔒</button>
+            </form>
+        </div>
+
+        <!-- CARD 4: CONFIRMATION SUMMARY -->
+        <div id="card-confirmation" class="glass-card hidden">
+            <div class="conf-badge">Locked! 💌</div>
+
+            <div class="conf-decor">
+                <i class="fas fa-heart animated-heart"></i>
+            </div>
+
+            <h1 class="conf-title">It's a Date!</h1>
+            <p class="conf-subtitle">Here are the details of our perfect rendezvous:</p>
+
+            <div class="summary-box">
+                <div class="summary-item">
+                    <span class="sum-label"><i class="far fa-calendar-alt"></i> When</span>
+                    <span id="sum-date" class="sum-value">Sunday, September 10th</span>
+                </div>
+                <div class="summary-item">
+                    <span class="sum-label"><i class="far fa-clock"></i> Time</span>
+                    <span id="sum-time" class="sum-value">07:00 PM</span>
+                </div>
+                <div class="summary-item">
+                    <span class="sum-label"><i class="fas fa-map-marker-alt"></i> Activity</span>
+                    <span id="sum-activity" class="sum-value">Sunset Picnic</span>
+                </div>
+                <div class="summary-item">
+                    <span class="sum-label"><i class="fas fa-cookie-bite"></i> Dessert</span>
+                    <span id="sum-dessert" class="sum-value">Strawberry Gelato</span>
+                </div>
+            </div>
+
+            <div class="conf-message">
+                "Our plans are officially set. A calendar invite has been sent to our hearts. Can't wait! 🥰"
+            </div>
+
+            <button id="btn-restart" class="btn btn-text-only"><i class="fas fa-undo"></i> Start Over</button>
+        </div>
+
+    </main>
+
+    <footer class="app-footer">
+        Made with ❤️ for you 🦋
+    </footer>
+
+    <!-- Script for Confetti and Interactivity -->
+    <script src="script.js"></script>
+</body>
+
+</html>

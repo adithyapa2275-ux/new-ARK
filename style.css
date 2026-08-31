@@ -1,0 +1,869 @@
+/* ==========================================================================
+   CSS Custom Properties & Design System
+   ========================================================================== */
+:root {
+  --primary-hue: 342; /* Rose/Pink */
+  --primary: HSL(var(--primary-hue), 90%, 62%);
+  --primary-hover: HSL(var(--primary-hue), 95%, 52%);
+  --primary-glow: hsla(var(--primary-hue), 90%, 62%, 0.35);
+  --primary-bg-gradient: linear-gradient(135deg, HSL(var(--primary-hue), 90%, 65%), HSL(320, 80%, 50%));
+  
+  --secondary: rgba(255, 255, 255, 0.1);
+  --secondary-hover: rgba(255, 255, 255, 0.2);
+  
+  --bg-gradient: radial-gradient(circle at center, HSL(255, 30%, 12%) 0%, HSL(255, 45%, 5%) 100%);
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-glow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  
+  --text-main: HSL(210, 20%, 98%);
+  --text-muted: HSL(210, 14%, 80%);
+  --accent: HSL(42, 94%, 65%); /* Warm Gold */
+  
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.2s ease;
+}
+
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: var(--font-sans);
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  touch-action: manipulation;
+}
+
+/* ==========================================================================
+   Background & Ambient Animations
+   ========================================================================== */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ambient glow spheres behind the card */
+.glow-sphere {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  opacity: 0.25;
+  z-index: 2;
+  animation: float-glow 20s infinite alternate ease-in-out;
+}
+
+.glow-1 {
+  width: 400px;
+  height: 400px;
+  background: HSL(var(--primary-hue), 85%, 60%);
+  top: -100px;
+  right: -50px;
+}
+
+.glow-2 {
+  width: 500px;
+  height: 500px;
+  background: HSL(260, 80%, 55%);
+  bottom: -150px;
+  left: -100px;
+  animation-delay: -5s;
+}
+
+@keyframes float-glow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(60px, 40px) scale(1.15); }
+}
+
+/* Interactive Floating Hearts Background */
+.bg-heart-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: -50px;
+  color: var(--primary);
+  opacity: 0.45;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(255, 182, 193, 0.5));
+  animation: rise-and-sway linear infinite;
+}
+
+@keyframes rise-and-sway {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.55;
+  }
+  85% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-105vh) rotate(360deg) scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Music Button
+   ========================================================================== */
+.music-btn {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-main);
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: var(--transition-fast);
+}
+
+.music-btn:hover {
+  transform: scale(1.08);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.music-btn.playing {
+  animation: pulse-music 2s infinite ease-in-out;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+@keyframes pulse-music {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* ==========================================================================
+   Main Layout & Card Container
+   ========================================================================== */
+.app-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  width: 100%;
+  max-width: 600px;
+  z-index: 5;
+}
+
+/* The Glassmorphic Card */
+.glass-card {
+  width: 100%;
+  background: var(--card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--card-border);
+  border-radius: 32px;
+  padding: 45px 35px;
+  text-align: center;
+  box-shadow: var(--card-glow);
+  transition: var(--transition-smooth);
+  opacity: 0;
+  transform: translateY(30px) scale(0.96);
+  pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+  max-height: 85vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--card-border) transparent;
+}
+
+.glass-card::-webkit-scrollbar {
+  width: 6px;
+}
+.glass-card::-webkit-scrollbar-thumb {
+  background-color: var(--card-border);
+  border-radius: 3px;
+}
+
+/* Active State for transition */
+.glass-card.active {
+  position: relative;
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+.glass-card.hidden {
+  opacity: 0;
+  transform: translateY(-30px) scale(0.95);
+  pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+}
+
+/* ==========================================================================
+   Card 1 Elements: Proposal
+   ========================================================================== */
+.card-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 25px;
+  animation: float-badge 3s infinite ease-in-out;
+}
+
+@keyframes float-badge {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+/* Envelope Drawing and Animations */
+.heart-animation-wrapper {
+  position: relative;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.floating-envelope {
+  width: 110px;
+  height: 75px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
+  animation: hover-envelope 4s infinite ease-in-out;
+}
+
+@keyframes hover-envelope {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 55px solid transparent;
+  border-right: 55px solid transparent;
+  border-top: 38px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  transform-origin: top;
+  z-index: 3;
+}
+
+.envelope-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0 0 6px 6px;
+  z-index: 2;
+}
+
+.heart-seal {
+  position: absolute;
+  top: 25px;
+  left: calc(50% - 15px);
+  width: 30px;
+  height: 30px;
+  font-size: 1.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 8px var(--primary-glow));
+  animation: pulse-heart 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-heart {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.2); }
+}
+
+.proposal-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+  background: linear-gradient(135deg, #fff 30%, HSL(var(--primary-hue), 85%, 85%) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.proposal-text {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin-bottom: 30px;
+  font-weight: 300;
+}
+
+.proposal-question {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 35px;
+  color: var(--text-main);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 25px;
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  height: 60px; /* Contain height during moving button */
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 14px 28px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border: none;
+  outline: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--primary-bg-gradient);
+  color: #fff;
+  box-shadow: 0 8px 25px var(--primary-glow);
+  transform-origin: center;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 30px hsla(var(--primary-hue), 90%, 62%, 0.5);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: var(--text-main);
+  border: 1px solid var(--card-border);
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-hover);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Pulsing Yes button animation */
+.pulse {
+  animation: btn-pulse 2s infinite ease-in-out;
+}
+
+@keyframes btn-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); box-shadow: 0 12px 30px hsla(var(--primary-hue), 90%, 62%, 0.5); }
+  100% { transform: scale(1); }
+}
+
+/* ==========================================================================
+   Card 2 Elements: Celebration & Love Letter
+   ========================================================================== */
+.celebration-header {
+  margin-bottom: 25px;
+}
+
+.heart-sparkle {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  animation: zoom-bounce 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes zoom-bounce {
+  0% { transform: scale(0.3); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.celebration-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, #fff 20%, HSL(var(--primary-hue), 90%, 75%) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Cute Love Letter styling */
+.love-letter-wrapper {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 30px;
+  text-align: left;
+  position: relative;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.love-letter {
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.love-letter p {
+  margin-bottom: 15px;
+}
+
+.love-letter p:last-child {
+  margin-bottom: 0;
+}
+
+.letter-signature {
+  text-align: right;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--primary);
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Card 3 Elements: Date Planner
+   ========================================================================== */
+.planner-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.planner-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 30px;
+}
+
+.planner-form {
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.form-group label i {
+  color: var(--primary);
+  margin-right: 6px;
+}
+
+/* Custom inputs styling */
+.planner-form input[type="date"],
+.planner-form input[type="time"],
+.planner-form input[type="text"] {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.planner-form input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--primary);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+/* Activity Select Grid */
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.activity-option {
+  cursor: pointer;
+  position: relative;
+}
+
+.activity-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.activity-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  transition: var(--transition-fast);
+}
+
+.activity-icon {
+  font-size: 1.8rem;
+  transition: var(--transition-fast);
+}
+
+.activity-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Selected state styling */
+.activity-option input[type="radio"]:checked + .activity-card {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--primary);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.activity-option input[type="radio"]:checked + .activity-card .activity-icon {
+  transform: scale(1.15);
+}
+
+.activity-option input[type="radio"]:checked + .activity-card .activity-label {
+  color: var(--text-main);
+}
+
+.btn-submit {
+  width: 100%;
+  margin-top: 15px;
+  padding: 16px;
+}
+
+/* ==========================================================================
+   Card 4 Elements: Confirmation Summary
+   ========================================================================== */
+.conf-badge {
+  display: inline-block;
+  background: rgba(46, 213, 115, 0.15);
+  border: 1px solid rgba(46, 213, 115, 0.3);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #2ed573;
+  margin-bottom: 25px;
+}
+
+.conf-decor {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+}
+
+.animated-heart {
+  animation: pulse-heart-large 1s infinite alternate cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: inline-block;
+  filter: drop-shadow(0 0 15px var(--primary-glow));
+}
+
+@keyframes pulse-heart-large {
+  0% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1.25) rotate(5deg); }
+}
+
+.conf-title {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #fff 40%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.conf-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 30px;
+}
+
+.summary-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 20px 25px;
+  margin-bottom: 30px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.sum-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.sum-label i {
+  color: var(--primary);
+  margin-right: 8px;
+  width: 16px;
+}
+
+.sum-value {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  text-align: right;
+}
+
+.conf-message {
+  font-style: italic;
+  color: var(--accent);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 35px;
+}
+
+.btn-text-only {
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  border: none;
+  transition: var(--transition-fast);
+}
+
+.btn-text-only:hover {
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+.btn-text-only i {
+  margin-right: 6px;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.app-footer {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 5;
+}
+
+/* ==========================================================================
+   Responsive Queries
+   ========================================================================== */
+@media (max-width: 500px) {
+  .app-container {
+    padding: 15px 12px;
+    max-width: 100%;
+  }
+  
+  .glass-card {
+    padding: 24px 16px;
+    border-radius: 24px;
+    max-height: 82dvh;
+    box-sizing: border-box;
+  }
+  
+  .proposal-title {
+    font-size: 1.8rem;
+  }
+
+  .proposal-text {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+  
+  .proposal-question {
+    font-size: 1.35rem;
+    margin-bottom: 20px;
+    padding-top: 18px;
+  }
+
+  .heart-animation-wrapper {
+    height: 90px;
+    margin-bottom: 15px;
+  }
+
+  .floating-envelope {
+    width: 90px;
+    height: 60px;
+  }
+
+  .envelope-flap {
+    border-left-width: 45px;
+    border-right-width: 45px;
+    border-top-width: 30px;
+  }
+
+  .envelope-body {
+    height: 38px;
+  }
+
+  .heart-seal {
+    top: 18px;
+    left: calc(50% - 15px);
+  }
+  
+  .btn-group {
+    flex-direction: column;
+    height: auto;
+    gap: 12px;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+
+  .activity-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .activity-card {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .sum-value {
+    text-align: left;
+  }
+
+  .music-btn {
+    top: 15px;
+    right: 15px;
+    width: 42px;
+    height: 42px;
+    font-size: 1rem;
+  }
+}
